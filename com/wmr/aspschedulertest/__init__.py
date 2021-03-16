@@ -13,4 +13,23 @@ APScheduler 调度框架测试
         你需要选择合适的调度器，这取决于你的应该用环境和你使用aspscheduler的目的。通常最常用的两个：
             BlockingScheduler:当调度器事你应用中唯一要运行的东西时使用。
             backgroundScheduler:当不运行其他框架时使用，并希望调度器在你应用的后台执行。
+
+配置调度器
+    ASPScheduler提供了许多的方式来配置调度器，你可以使用一个配置字典作为参数关键字的方式传入。你可以先创建调度器再配置和添加作业，这样你可以在不同的环境中得到更大的灵活性。
+    下面是一个简单实用BlockingScheduler,并使用默认内存和默认执行器。（MemoryJobStore,ThreadPoolExecutor）,其中线程池的最大线程数为10，配置完成后使用start（）方法来启动
 '''
+
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+import threading, time
+
+def my_job():
+    print(threading.current_thread().getName() + "hello world")
+    time.sleep(4)
+
+sched = BackgroundScheduler()
+sched.add_job(my_job, 'interval', seconds=5)
+sched.start()
+while True:
+    time.sleep(100000)
+
